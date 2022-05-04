@@ -9,7 +9,7 @@ public class TextArea extends JTextArea {
         super(content);
         Font myFont = null;
         try{
-            myFont = Font.createFont(Font.TRUETYPE_FONT, new File("C:\\Users\\diarr\\IdeaProjects\\Env\\fonts\\UbuntuRegular.ttf"));
+            myFont = Font.createFont(Font.TRUETYPE_FONT, new File("./fonts/Ubuntu/Ubuntu-Regular.ttf"));
             myFont = myFont.deriveFont(15f);
             GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(myFont);
         } catch (Exception e) {
