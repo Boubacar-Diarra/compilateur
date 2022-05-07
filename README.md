@@ -1,9 +1,8 @@
-# compiler
 
 L’objectif du projet était de mettre en pratique les notions apprises dans le cours de techniques de compilation, notamment les phases d’analyses (lexical, syntaxique, sémantique), de génération de code cible et d'interprétation.
 
 
-**Grammaire Hors Contexte de notre langage** 
+# **Grammaire Hors Contexte de notre langage** 
 
 1. ***Programme*** 
 
