@@ -9,10 +9,10 @@ L’objectif du projet était de mettre en pratique les notions apprises dans le
 
 Prog = ‘begin’ { instructions } ‘end’ 
 
-1. ***Simple Expression*** 
+2. ***Simple Expression*** 
 
 SExpr = Ident | Entier | Reel 
-# ***3. Expression arithmetque*** 
+3. ***Expression arithmetque*** 
 ExprA = SExpr { opA SExpr } 
 
 opA = (‘+’ | ‘-‘ | ‘\*’ | ‘/ ‘) 
@@ -21,22 +21,22 @@ opA = (‘+’ | ‘-‘ | ‘\*’ | ‘/ ‘)
 
 DeclVar = type ident [ ‘=’ ExprA { ‘,’ ident [ ‘=’ ExprA] } ] ‘;’ 
 
-4. ***Déclaration de constante*** 
+5. ***Déclaration de constante*** 
 
 DeclCste = ‘const’ type ident  ‘=’ ExprA { ‘,’ ident ‘=’ ExprA} ‘;’ 
 
-4. ***Affectation*** 
+6. ***Affectation*** 
 
 Affectation = ident ‘=’ ExprA ‘;’ 
-# ***7. Structure alternative*** 
+7. ***Structure alternative*** 
 *//cettre grammaire etant ambigue, plusieurs arbres syntaxique possible pour un if* InstrIf = ‘if’ ‘(‘ condition ‘)’ ‘{‘ {instructions} ‘}’ [ partElse ] partElse = ‘else’  InstrIf | ‘{‘ {instructions} ‘}’  
 
 //definition d’une structure exacte pour enlever l’ambiguité InstrIf = ‘if’ ‘(‘ condition ‘)’ ‘{‘ {instructions} ‘}’ partElse partElse = ‘else’  InstrIf | ‘{‘ {instructions} ‘}’  
 
-***8. Structure repetitive while*** 
+8. ***Structure repetitive while*** 
 
 InstrWhile = ‘while’ ‘(‘ condition ‘)’ ‘{‘ {instructions} ‘}’ 
-# ***9. Condition*** 
+9. ***Condition*** 
 Condition = ExprA opC ExprA [ opL condition ] 
 
 opC = ( ‘<’ | ‘>’ | ‘<=’ | ‘>=’ | ‘==’ | ‘ !=’) 
@@ -47,11 +47,11 @@ opL = (‘&&’ | ‘||’)
 
 InstrRead = scan ‘(‘ ident ‘)’ ‘;’ 
 
-10. ***Instruction d’ecriture*** 
+11. ***Instruction d’ecriture*** 
 
 InstrWrite = print ‘(‘ ident ‘)’ ‘;’ 
 
-10. ***Instruction*** 
+12. ***Instruction*** 
 
 Instr = DeclVar | DeclConst | Affectation | InstrWhile | InstrIf | InstrWrite | InstrRead | Cmt 
 
@@ -59,10 +59,10 @@ Instr = DeclVar | DeclConst | Affectation | InstrWhile | InstrIf | InstrWrite | 
 
 
 # **Contraintes Sémantiques du langage** 
-## ***13. Sur les variables*** 
+13. ***Sur les variables*** 
 - Deux variables ne peuvent pas avoir le même identifiant, idem pour les constantes. 
 - Une variable non déclarer ou non initialiser ne peut pas apparaitre dans une expression (arithmétique ou booléenne). 
-## ***14. Sur les contraintes*** 
+14. ***Sur les contraintes*** 
 - Une constante ne peut être déclarer plus d’une fois et doit être initialiser lors de sa déclaration. 
 - On ne peut pas affecter une valeur a une constante après sa déclaration. 
 
