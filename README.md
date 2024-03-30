@@ -1,87 +1,101 @@
+# **Introduction au Projet de Langage de Programmation**
 
-L’objectif du projet était de mettre en pratique les notions apprises dans le cours de techniques de compilation, notamment les phases d’analyses (lexical, syntaxique, sémantique), de génération de code cible et d'interprétation.
+Ce projet vise à mettre en pratique les concepts étudiés dans le cadre du cours de techniques de compilation, en se concentrant particulièrement sur les différentes phases d'analyse (lexical, syntaxique, sémantique), ainsi que sur la génération de code cible et l'interprétation.
 
+## **Grammaire Hors Contexte de notre langage**
 
-# **Grammaire Hors Contexte de notre langage** 
-
-1. ***Programme*** 
-
+1. **Programme** 
+```
 Prog = ‘begin’ { instructions } ‘end’ 
+```
 
-2. ***Simple Expression*** 
-
+2. **Expression Simple** 
+```
 SExpr = Ident | Entier | Reel 
-3. ***Expression arithmetque*** 
+```
+
+3. **Expression Arithmétique** 
+```
 ExprA = SExpr { opA SExpr } 
 
 opA = (‘+’ | ‘-‘ | ‘\*’ | ‘/ ‘) 
+```
 
-4. ***Déclaration de variable*** 
-
+4. **Déclaration de Variable** 
+```
 DeclVar = type ident [ ‘=’ ExprA { ‘,’ ident [ ‘=’ ExprA] } ] ‘;’ 
+```
 
-5. ***Déclaration de constante*** 
-
+5. **Déclaration de Constante** 
+```
 DeclCste = ‘const’ type ident  ‘=’ ExprA { ‘,’ ident ‘=’ ExprA} ‘;’ 
+```
 
-6. ***Affectation*** 
-
+6. **Affectation** 
+```
 Affectation = ident ‘=’ ExprA ‘;’ 
-7. ***Structure alternative*** 
-*//cettre grammaire etant ambigue, plusieurs arbres syntaxique possible pour un if* InstrIf = ‘if’ ‘(‘ condition ‘)’ ‘{‘ {instructions} ‘}’ [ partElse ] partElse = ‘else’  InstrIf | ‘{‘ {instructions} ‘}’  
+```
 
-//definition d’une structure exacte pour enlever l’ambiguité InstrIf = ‘if’ ‘(‘ condition ‘)’ ‘{‘ {instructions} ‘}’ partElse partElse = ‘else’  InstrIf | ‘{‘ {instructions} ‘}’  
+7. **Structure Alternative**
+```
+InstrIf = ‘if’ ‘(‘ condition ‘)’ ‘{‘ {instructions} ‘}’ [ partElse ] 
 
-8. ***Structure repetitive while*** 
+partElse = ‘else’ InstrIf | ‘{‘ {instructions} ‘}’  
+```
 
+8. **Structure Répétitive While** 
+```
 InstrWhile = ‘while’ ‘(‘ condition ‘)’ ‘{‘ {instructions} ‘}’ 
-9. ***Condition*** 
+```
+
+9. **Condition** 
+```
 Condition = ExprA opC ExprA [ opL condition ] 
 
 opC = ( ‘<’ | ‘>’ | ‘<=’ | ‘>=’ | ‘==’ | ‘ !=’) 
 
 opL = (‘&&’ | ‘||’) 
+```
 
-10. ***Instruction de lecture*** 
-
+10. **Instruction de Lecture** 
+```
 InstrRead = scan ‘(‘ ident ‘)’ ‘;’ 
+```
 
-11. ***Instruction d’ecriture*** 
-
+11. **Instruction d’Écriture** 
+```
 InstrWrite = print ‘(‘ ident ‘)’ ‘;’ 
+```
 
-12. ***Instruction*** 
-
+12. **Instruction** 
+```
 Instr = DeclVar | DeclConst | Affectation | InstrWhile | InstrIf | InstrWrite | InstrRead | Cmt 
+```
 
+## **Contraintes Sémantiques du Langage**
 
+13. **Sur les Variables**
+- Deux variables ne peuvent pas avoir le même identifiant, idem pour les constantes.
+- Une variable non déclarer ou non initialiser ne peut pas apparaitre dans une expression (arithmétique ou booléenne).''
 
+14. **Sur les Contraintes**
+- Une constante ne peut être déclarée qu'une seule fois et doit être initialisée lors de sa déclaration.
+- On ne peut pas affecter une valeur à une constante après sa déclaration.
 
-# **Contraintes Sémantiques du langage** 
-13. ***Sur les variables*** 
-- Deux variables ne peuvent pas avoir le même identifiant, idem pour les constantes. 
-- Une variable non déclarer ou non initialiser ne peut pas apparaitre dans une expression (arithmétique ou booléenne). 
-14. ***Sur les contraintes*** 
-- Une constante ne peut être déclarer plus d’une fois et doit être initialiser lors de sa déclaration. 
-- On ne peut pas affecter une valeur a une constante après sa déclaration. 
+## **Unités Lexicales**
 
+Les caractères spéciaux simples : `+, -, /, *, %, <, >, =, {, }, (, ), , “, ‘, [, ], !`
 
-# **Unités lexicales** 
+Les caractères spéciaux doubles : `==, ++, --, <=, >=, +=, -=, *=, /=, &&, ||, !=, //, /*, */`
 
+Les mots-clés : `if, while, elseIf, const, “;”, for, do, int, double, float, string, Boolean, else`
 
-Les caractères spécieux simples : +, -, /, \*, %, <, >, =, {, }, (, ), \, “, ‘, [, ], ! 
+Les constantes littérales : `145, -78  (en général tous les nombres)`, `‘a’, ‘b’ (en général toutes les lettres.)`
 
-Les caractères spécieux doubles : ==, ++, --, <=, >=, +=, -=, \*=, /=, &&, ||, !=, //, /\*, \*/ 
+Les identificateurs : `i, j, nom_de_variable`
 
-Les mots-clés: if, while, elseIf, const,  “;”, for, do, int, double, float, string, Boolean, else 
+Tables de correspondances de nos lexèmes
 
-Les constantes littérales : 145, -78 : en générale tous les nombres, ‘a’, ‘b’ : en générale toutes les lettres. 
-
-Les identificateurs : i, j, nom\_de\_variable 
-
-
-
-Tables de correspondances de nos lexeme 
 
 |+ |add |
 | :- | :- |
@@ -121,15 +135,10 @@ Tables de correspondances de nos lexeme
 |2,5 |reel |
 |/\* |debCmt |
 |\*/ |finCmt |
-| | |
 
-
-Grammaire de chaque unité lexical (basé sur celle du java) : lettre -> A | B ……. | Z | a | b ……. | z ó [a-zA-z]  chiffre -> 0 | 1 | 2 …… | 9 ó [0-9] ident -> lettre {[‘\_’] lettre | chiffre}  ó ^[a-zA-Z](\_ ?[a-zA-Z]){0,} nombre -> [signe]chiffre{chiffre} ó \_?[0-9]{1,} ; réel -> [ signe ] chiffre { chiffre } [ ‘,’ Chiffre { chiffre } ] 
-
-
-
-
-
-
-
-
+Grammaire de chaque unité lexical (basé sur celle du java) : 
+- lettre -> A | B ……. | Z | a | b ……. | z 
+- chiffre -> 0 | 1 | 2 …… | 9 
+- ident -> lettre {[‘\_’] lettre | chiffre} 
+- nombre -> [signe]chiffre{chiffre} 
+- réel -> [ signe ] chiffre { chiffre } [ ‘,’ Chiffre { chiffre } ]
